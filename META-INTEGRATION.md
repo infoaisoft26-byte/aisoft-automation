@@ -9,6 +9,9 @@ This repository contains serverless integration endpoints. **Code deployment alo
 - `GET /api/meta/oauth/callback` — exchanges OAuth code, fetches managed Pages, and stores Page/linked Instagram tokens encrypted in Postgres.
 - `GET|POST /api/meta/webhook` — Meta webhook verification, signed payload verification, lead retrieval, and webhook event storage.
 - `POST /api/meta/whatsapp/send` — sends a text message through WhatsApp Cloud API. Requires `Authorization: Bearer <META_ADMIN_KEY>`; do not call from public browser code.
+- `POST /api/meta/instagram/send` — sends an Instagram message to a recipient who has already messaged the Professional account; requires the same admin header.
+- `GET /api/meta/leads` — returns the latest stored Lead Ads records; requires the same admin header.
+- `/meta-connect.html` — private/no-index operator page to start the Page-connection OAuth flow.
 
 ## Vercel environment variables
 
@@ -46,6 +49,10 @@ Generate secrets locally; do not commit them to GitHub. Example for encryption k
 ## How to connect the Page
 
 After the variables and database are ready, send a POST request to `/api/meta/oauth/start` with `Authorization: Bearer <META_ADMIN_KEY>` and `Content-Type: application/json`. Open the returned `url` in a browser and complete authorization. The callback stores Page and linked Professional Instagram tokens encrypted. The OAuth callback currently does not provide a CRM dashboard or public lead-export endpoint; lead events are persisted in `meta_leads` and webhook payloads in `meta_webhook_events`, accessible only through the configured database/admin tooling.
+
+## Facebook Login scope
+
+The OAuth flow in this repository uses Facebook Login to authorize an administrator to connect managed Pages and linked Instagram Professional accounts. The current site is a static marketing website with no customer account database or protected user area, so this is **not yet a customer-facing “Sign in with Facebook” feature**. Do not advertise consumer login as live until a user-account/session flow is designed and tested.
 
 ## Security and production notes
 
