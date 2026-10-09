@@ -1,0 +1,9 @@
+{
+  "name": "aisoft-automation",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AISOFT Automation website with secure Meta integration endpoints",
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.2"
+  }
+}
