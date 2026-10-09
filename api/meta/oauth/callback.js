@@ -31,7 +31,8 @@ module.exports = async (req, res) => {
     longUrl.searchParams.set("fb_exchange_token", shortData.access_token);
     const longResponse = await fetch(longUrl);
     const longData = await longResponse.json();
-    const userToken = longResponse.ok && longData.access_token ? longData.access_token : shortData.access_token;
+    if (!longResponse.ok || !longData.access_token) throw new Error("Could not exchange for a long-lived token; check app configuration.");
+    const userToken = longData.access_token;
     const pagesUrl = new URL("https://graph.facebook.com/" + graphVersion() + "/me/accounts");
     pagesUrl.searchParams.set("fields", "id,name,access_token,instagram_business_account{id,username}");
     pagesUrl.searchParams.set("access_token", userToken);
