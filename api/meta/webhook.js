@@ -1,6 +1,5 @@
 const crypto = require("node:crypto");
 const { json, getSql, ensureSchema, decryptToken, rawBody, verifyMetaSignature, graphVersion } = require("./_lib");
-module.exports.config = { api: { bodyParser: false } };
 module.exports = async (req, res) => {
   if (req.method === "GET") {
     const mode = req.query && req.query["hub.mode"];
@@ -32,7 +31,7 @@ module.exports = async (req, res) => {
         if (!rows.length) { console.warn("Lead webhook received before Page OAuth connection was stored"); continue; }
         const token = decryptToken(rows[0].encrypted_access_token);
         const leadUrl = new URL("https://graph.facebook.com/" + graphVersion() + "/" + encodeURIComponent(leadId));
-        leadUrl.searchParams.set("fields", "id,created_time,field_data,form_id,ad_id,adgroup_id");
+        leadUrl.searchParams.set("fields", "id,created_time,field_data,form_id,ad_id,is_organic,platform");
         leadUrl.searchParams.set("access_token", token);
         const leadResponse = await fetch(leadUrl);
         const lead = await leadResponse.json();
@@ -46,3 +45,4 @@ module.exports = async (req, res) => {
     return json(res, 500, { error: "Webhook processing failed" });
   }
 };
+module.exports.config = { api: { bodyParser: false } };
