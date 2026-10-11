@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     res.setHeader('Allow', 'GET');
     return send(res, 405, { error: 'Method not allowed.' });
   }
-  const expected = process.env.ADMIN_KEY;
+  const expected = process.env.AISOFT_ADMIN_KEY;
   if (!expected) return send(res, 503, { error: 'Admin access is not configured on the server yet.' });
   const supplied = req.headers['x-admin-key'];
   if (typeof supplied !== 'string' || supplied.length !== expected.length ||
